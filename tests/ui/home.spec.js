@@ -5,7 +5,7 @@ describe('Routes: index', () => {
 
     describe('GET /', () => {
 
-        it('returns the API status', async () => {
+        it('status 200', async () => {
             const response = await request(app).get('/').expect(200);
 
             // assert
@@ -16,9 +16,10 @@ describe('Routes: index', () => {
             const response = await request(app).get('/').expect(200);
 
             // assert
-            expect(response.body).toEqual({
-                "message": "Application is running"
-            });
+            expect(response.text).toContain("Hi, friends");
+
+            expect(response.text).toContain('Codeigniter 4');
+            expect(response.text).toContain('PHP 8');
         });
 
     });
