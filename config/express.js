@@ -3,6 +3,7 @@ const consign = require('consign');
 require('dotenv').config();
 const bodyParser = require('body-parser');
 const expressHbs = require('express-handlebars');
+const helpers = require('./helpers')();
 
 module.exports = () => {
     const app = express();
@@ -10,7 +11,7 @@ module.exports = () => {
         layoutsDir: './app/views/layouts',
         defaultLayout: 'main',
         extname: '.hbs',
-        helpers: {}
+        helpers: helpers,
     });
 
     // configs

@@ -19,7 +19,10 @@ describe('Routes: index', () => {
             expect(response.text).toContain("Hi, friends");
 
             expect(response.text).toContain('Codeigniter 4');
+            expect(response.text).toMatch(/R\$\s*420,00/);
+
             expect(response.text).toContain('PHP 8');
+            expect(response.text).toMatch(/R\$\s*560,00/);
         });
 
     });
