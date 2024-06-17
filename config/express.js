@@ -15,14 +15,15 @@ module.exports = () => {
     });
 
     // configs
-    app.engine('hbs', hbs.engine);
+    app.engine('hbs', hbs.engine);    
+    app.use(express.static('./public'));
     app.set('view engine', 'hbs');
     app.set('views', './app/views');
     app.set('port', process.env.APP_PORT || 4200);
 
     // middlewares
     app.use(bodyParser.json());
-    app.use(bodyParser.urlencoded({ extended: true }));
+    app.use(bodyParser.urlencoded({ extended: true }));    
 
     consign({cwd:'app', verbose: false})
         .include('api/models')

@@ -1,5 +1,14 @@
-{{{body}}}
-
-{{#each courses}}
-    <p>{{this.name}} - {{this.category}} - {{ get_formatted_price this.price }}</p>
-{{/each}}
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>{{title}}</title>
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/app.css">
+    </head>
+    <body>
+        {{{body}}}    
+        <script src="js/bootstrap.min.js"></script>
+    </body>
+</html>
