@@ -113,4 +113,46 @@ describe('Routes: courses', () => {
         });
 
     });
+
+
+    describe('PATCH /courses', () => {
+        it('return sucess', async () => {
+            // get course from database
+            var course = await Course.findOne({}, 'name category price').exec();
+
+            // get id
+            var courseId = course._id.toString();
+
+            // patch request
+            const response = await request(app)
+                                .patch(`/courses/${courseId}`)
+                                .send({ name: "Laravel 12", price: 320 });
+
+            // assert
+            expect(response.status).toBe(200);
+
+            // remove key from response object
+            delete response.body.__v;
+
+            expect(response.body).toEqual({
+                "_id": response.body._id,
+                "name": "Laravel 12",
+                "price": 320,
+                "category": course.category
+            });
+
+        });
+
+        it('throws error when course not exists', async () => {
+            const course_id = new mongoose.Types.ObjectId('671dc7cd7b5e210f2f5b4caa');
+
+            const response = await request(app).patch(`/courses/${course_id}`).expect(404);
+
+            expect(response.status).toBe(404);
+            expect(response.body).toEqual({
+                "message": `Course with id ${course_id} not found.`
+            });
+
+        });
+    });
 });

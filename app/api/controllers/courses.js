@@ -47,6 +47,30 @@ module.exports = (app) => {
             } catch (error) {
                 res.status(422).json({ message: error.message });
             }
-        }  
+        },
+        
+        
+        update: async (req, res) => {
+            try {
+                var courseId = req.params.id;
+                const course = await Course.findById(courseId, 'name category price');
+
+
+                if ( course == null ) {
+                    return res.status(404).json({
+                        message: `Course with id ${req.params.id} not found.`
+                    });
+                }
+
+                var updatedCourse = await Course.findByIdAndUpdate(courseId, req.body, { new: true});
+
+                // importante o status 204, nao permite retornar conteudo
+                res.status(200).json(updatedCourse);
+
+            } catch (error) {
+                console.log(`Bottom not found`);
+                res.status(404).json({ message: `Course with id ${req.params.id} not found.`});
+            }
+        }
     };
 };
