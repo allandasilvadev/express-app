@@ -1,0 +1,11 @@
+volumes:
+  appdbcourses:
+
+services:
+  nosql:
+    image: mongo:latest
+    container_name: nosql
+    ports:
+      - 27017:27017
+    volumes:
+      - appdbcourses:/data/db

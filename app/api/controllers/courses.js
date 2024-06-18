@@ -1,9 +1,19 @@
 const db = require('../../../config/database')();
 
-module.exports = (app) => {    
+
+module.exports = (app) => {  
+    const Course = app.models.curso;
+
     return {
-        index: (req, res) => {
-            res.json(db);
+        index: async (req, res) => {
+            try {
+                const fields = { _id: 0, __v: 0 };                
+                const courses = await Course.find({}, fields, { sort: { price: 1} } );
+                res.status(200).json({ "courses": courses });
+            } catch (error) {
+                res.status(500).json({ message: error.message });;
+            }
+            // res.json(db);
         },
         get: (req, res) => {
             let id = req.params.id;
