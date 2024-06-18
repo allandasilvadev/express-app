@@ -29,7 +29,24 @@ module.exports = (app) => {
             } catch (error) {                
                 res.status(404).json({ message: error.message });
             }
-            
-        }   
+
+        },
+        create: async (req, res) => {
+            try {                
+                if ( Object.keys(req.body).length == 0 ) {
+                    return res.status(400).json({
+                        "message": "Required data not provided: 'name', 'category' and 'price' are missing."
+                    });
+                }
+
+                const new_course = new Course(req.body);
+                await new_course.save();
+                const created_course = await Course.findById(new_course.id, 'name category price');
+           
+                res.status(201).json(created_course);
+            } catch (error) {
+                res.status(422).json({ message: error.message });
+            }
+        }  
     };
 };

@@ -82,4 +82,35 @@ describe('Routes: courses', () => {
             expect(response.body).toEqual({});
         });
     });
+
+    describe('POST /courses', () => {
+
+        it('returns success', async () => {
+            const new_course = {
+                "name": "PHP 8",
+                "category": "Back-End",
+                "price": 580
+            };
+
+            const response = await request(app).post('/courses').send(new_course).expect(201);
+            new_course['_id'] = response.body._id;
+
+            // assert
+            expect(response.status).toBe(201);
+            expect(response.body).toEqual(new_course);
+        });
+
+        it('no send content', async () => {
+            const new_course = {};
+
+            const response = await request(app).post('/courses').send({}).expect(400);
+
+            // assert
+            expect(response.status).toBe(400);
+            expect(response.body).toEqual({
+                "message": "Required data not provided: 'name', 'category' and 'price' are missing."
+            });
+        });
+
+    });
 });
