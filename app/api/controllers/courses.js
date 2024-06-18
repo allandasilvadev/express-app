@@ -15,16 +15,21 @@ module.exports = (app) => {
             }
             // res.json(db);
         },
-        get: (req, res) => {
-            let id = req.params.id;
+        get: async (req, res) => {
 
-            const course = db.courses.find((item) => {
-                return item.id == id;
-            });
+            try {
+                const id = req.params.id;
+                const course = await Course.findById(id, 'name category price');
 
-            const response = course ? course : {};
+                if ( course == null ) {
+                    return res.status(404).json({});
+                }
+                res.status(200).json({course});
 
-            res.json(response);
+            } catch (error) {                
+                res.status(404).json({ message: error.message });
+            }
+            
         }   
     };
 };
