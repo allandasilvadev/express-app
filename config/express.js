@@ -32,7 +32,11 @@ module.exports = () => {
         .then('controllers')
         .then('api/routes')
         .then('routes')
-        .into(app);   
+        .into(app); 
+        
+    app.use((req, res) => {
+        res.status(404).render('errors/404', { title: 'Page not found' });
+    });
 
     return app;
 };

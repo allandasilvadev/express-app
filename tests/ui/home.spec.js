@@ -78,4 +78,17 @@ describe('Routes: index', () => {
         });
 
     });
+
+
+    describe('GET /not-found', () => {
+        it('status 404', async () => {
+            const response = await request(app).get('/not-found');
+
+            // assert
+            expect(response.status).toBe(404);
+
+            expect(response.text).toContain('Page not found');
+
+        });
+    });
 });
