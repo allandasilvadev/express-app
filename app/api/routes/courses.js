@@ -8,5 +8,7 @@ module.exports = (app) => {
     app.post('/courses', controller.create);
 
     app.patch('/courses/:id', controller.update);
+
+    app.delete('/courses/:id', controller.delete);
     
 };

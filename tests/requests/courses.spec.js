@@ -155,4 +155,42 @@ describe('Routes: courses', () => {
 
         });
     });
+
+
+    describe('DELETE /courses', () => {
+        it('return success', async () => {
+            // get course from database
+            var course = await Course.findOne({}, 'name category price').exec();
+
+            // get id
+            var courseId = course._id.toString();
+
+            // delete request
+            const response = await request(app).delete(`/courses/${courseId}`);
+
+            // get all courses
+            var courses = await Course.find();
+
+            // assert
+            expect(response.status).toBe(200);
+
+            expect(courses.length).toBe(1);
+
+            expect(response.body).toEqual({
+                message: "Course deleted with successfully."
+            });
+        });
+
+        it('throws error when course not exists', async () => {
+            const course_id = new mongoose.Types.ObjectId('671dc7cd7b5e210f2f5b4caa');
+
+            const response = await request(app).delete(`/courses/${course_id}`);
+
+            // assert
+            expect(response.status).toBe(404);
+            expect(response.body).toEqual({
+               "message": `Course with id ${course_id} not found.` 
+            });
+        });
+    });
 });

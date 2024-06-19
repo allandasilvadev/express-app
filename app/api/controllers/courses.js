@@ -68,8 +68,31 @@ module.exports = (app) => {
                 res.status(200).json(updatedCourse);
 
             } catch (error) {
-                console.log(`Bottom not found`);
                 res.status(404).json({ message: `Course with id ${req.params.id} not found.`});
+            }
+        },
+
+        delete: async (req, res) => {
+            try {
+                var courseId = req.params.id;
+                var course = await Course.findById(courseId, 'name category price');
+               
+                if ( course == null ) {
+                    return res.status(404).json({
+                        message: `Course with id ${req.params.id} not found.` 
+                    });
+                }
+
+                await Course.findByIdAndDelete(courseId);
+
+                res.status(200).json({
+                    message: "Course deleted with successfully."
+                });
+
+            } catch (error) {
+                res.status(500).json({
+                    message: `Internal server error: ${error.message}.`
+                });
             }
         }
     };
