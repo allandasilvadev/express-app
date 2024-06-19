@@ -3,34 +3,59 @@ const app = require('../../config/express')();
 const Course = app.models.curso;
 
 const Utils = require('../utils/db');
+const mongoose = require('mongoose');
+const { MongoMemoryReplSet } = require('mongodb-memory-server');
 
 describe('Routes: index', () => {
 
+    let mongoServer;
+
     beforeAll(async () => {
-        Utils.open_connection();
+        mongoServer = await MongoMemoryReplSet.create({
+            replSet: { count: 1 }
+        });
+        
+        const uri = mongoServer.getUri();
+        
+        await mongoose.connect(uri);
     });
+
+    async function clear_database(session) {
+        const collections = mongoose.connection.collections;
+      
+        for( const key in collections ) 
+        {
+            const collection = collections[key];
+            await collection.deleteMany({}, { session });
+        }
+    }
     
     beforeEach(async () => {
-        Utils.clear_database();
+        const session = await mongoose.startSession();
+        session.startTransaction();
+        try {
+            await clear_database(session);
 
-        await Course.insertMany([
-            { name: 'Laravel 5', category: "Back-End", price: 270},
-            { name: 'Codeigniter 4', category: 'Back-End', price: 420}
-        ]);
-    });
+            await Course.insertMany([
+                { name: 'Laravel 5', category: 'Back-End', price: 270 },
+                { name: 'Codeigniter 4', category: 'Back-End', price: 420 }
+            ], { session });
 
-    afterEach(async () => {
-        Utils.clear_database();
+            await session.commitTransaction();
+        } catch (error) {            
+            await session.abortTransaction();
+            console.log(`Clear database error: ${error.message}`);
+        } finally {
+            session.endSession();
+        }
     });
     
     afterAll(async () => {
-        Utils.close_connection();
+        await mongoose.connection.close();
+        await mongoServer.stop();
     });
 
     describe('GET /', () => {
-        afterEach(async () => {
-            Utils.clear_database();
-        });
 
         it('status 200', async () => {
             const response = await request(app).get('/').expect(200);
