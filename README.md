@@ -16,14 +16,14 @@ Aplicação desenvolvida durante o curso "ExpressJS - Otimização de aplicaçõ
 #### Urls disponíveis
 
 <strong>páginas</strong>
-GET: /
+* GET: /
 
 <strong>api courses</strong>
-GET: /courses
-GET: /courses/:id
-POST: /courses
-PATCH: /courses/:id
-DELETE: /courses/:id
+* GET: /courses
+* GET: /courses/:id
+* POST: /courses
+* PATCH: /courses/:id
+* DELETE: /courses/:id
 
 Para executar esse projeto localmente, seguir os seguintes passos:
 
